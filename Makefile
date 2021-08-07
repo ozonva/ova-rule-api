@@ -1,4 +1,4 @@
-.PHONY: build, run, lint
+.PHONY: build, run, lint, test
 
 build:
 	go build -o ./bin/app ./cmd/ova-rule-api
@@ -8,3 +8,6 @@ run:
 
 lint:
 	golangci-lint run -v
+
+test:
+	go test ./...
