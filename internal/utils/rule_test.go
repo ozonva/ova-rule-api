@@ -77,3 +77,37 @@ func TestSplitToBulksNegative(t *testing.T) {
 		assert.EqualError(t, err, c.err.Error())
 	}
 }
+
+func TestMapRulesPositive(t *testing.T) {
+	cases := []struct {
+		rules    []models.Rule
+		expected map[int64]models.Rule
+	}{
+		{
+			rules:    []models.Rule{{UserID: 1}, {UserID: 2}, {UserID: 3}},
+			expected: map[int64]models.Rule{1: {UserID: 1}, 2: {UserID: 2}, 3: {UserID: 3}},
+		},
+		{
+			rules:    []models.Rule{},
+			expected: map[int64]models.Rule{},
+		},
+		{
+			rules:    nil,
+			expected: map[int64]models.Rule{},
+		},
+	}
+
+	for _, c := range cases {
+		actual, err := MapRules(c.rules)
+		if err != nil {
+			t.Fatal(err)
+		}
+		assert.Equal(t, c.expected, actual)
+	}
+}
+
+func TestMapRulesNegative(t *testing.T) {
+	rules := []models.Rule{{UserID: 2}, {UserID: 2}}
+	_, err := MapRules(rules)
+	assert.EqualError(t, err, "duplicate key")
+}

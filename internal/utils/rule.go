@@ -35,3 +35,17 @@ func SplitToBulks(rules []models.Rule, batchSize int) ([][]models.Rule, error) {
 
 	return bulks, nil
 }
+
+// MapRules конвертирует слайс правил от структуры в отображение,
+// где ключ идентификатор структуры, а значение сама структура.
+func MapRules(rules []models.Rule) (map[int64]models.Rule, error) {
+	result := make(map[int64]models.Rule, len(rules))
+	for _, rule := range rules {
+		if _, ok := result[rule.UserID]; ok {
+			return nil, errors.New("duplicate key")
+		}
+		result[rule.UserID] = rule
+	}
+
+	return result, nil
+}
