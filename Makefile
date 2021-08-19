@@ -1,4 +1,4 @@
-.PHONY: build, run, lint, test
+.PHONY: build, run, lint, test, mocks
 
 build:
 	go build -o ./bin/app ./cmd/ova-rule-api
@@ -9,5 +9,9 @@ run:
 lint:
 	golangci-lint run -v
 
-test:
+test: mocks
 	go test ./...
+
+mocks:
+	rm -rf ./internal/mocks/mock_*
+	mockgen -source=./internal/repo/repo.go -destination=./internal/mocks/mock_repo.go
