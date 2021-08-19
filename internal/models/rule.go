@@ -3,6 +3,7 @@ package models
 import "fmt"
 
 type Rule struct {
+	ID     int64
 	Name   string
 	Count  uint64
 	UserID int64
