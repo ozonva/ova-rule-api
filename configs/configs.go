@@ -15,12 +15,12 @@ var DatabaseConfig *Database
 
 type Server struct {
 	Host string `yaml:"host"`
-	Port int    `yaml:"port"`
+	Port string `yaml:"port"`
 }
 
 type Database struct {
 	Host     string `yaml:"host"`
-	Port     int    `yaml:"port"`
+	Port     string `yaml:"port"`
 	Username string `yaml:"user"`
 	Password string `yaml:"password"`
 }

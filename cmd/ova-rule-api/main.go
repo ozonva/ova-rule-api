@@ -2,15 +2,19 @@ package main
 
 import (
 	"fmt"
+	"github.com/rs/zerolog/log"
 
 	"github.com/ozonva/ova-rule-api/configs"
+	api "github.com/ozonva/ova-rule-api/internal/app/ova_rule_api"
 )
 
 func main() {
-	fmt.Println("Awesome service ova-rule-api")
-
+	log.Info().Msg("Подгружаем конфиги...")
 	configs.Load()
 
-	fmt.Printf("Server config: %+v\n", *configs.ServerConfig)
-	fmt.Printf("Database config: %+v\n", *configs.DatabaseConfig)
+	log.Info().Msg(fmt.Sprintf("Запускаем gRPC сервер: %s%s", configs.ServerConfig.Host, configs.ServerConfig.Port))
+
+	if err := api.Run(); err != nil {
+		log.Fatal().Err(err)
+	}
 }

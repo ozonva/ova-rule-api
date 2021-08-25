@@ -5,6 +5,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/onsi/ginkgo"
+
 	"github.com/ozonva/ova-rule-api/internal/flusher"
 	"github.com/ozonva/ova-rule-api/internal/models"
 )
@@ -40,6 +42,8 @@ func (s *saver) Init() {
 	s.notifyCh = make(chan struct{}, 1)
 
 	go func(ch <-chan struct{}) {
+		defer ginkgo.GinkgoRecover()
+
 		ticker := time.NewTicker(s.timeout)
 		defer ticker.Stop()
 

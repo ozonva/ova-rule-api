@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package ova.rule.api;
+
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/ozonva/ova-rule-api/pkg/ova-rule-api;ova_rule_api";
+
+service API {
+  rpc CreateRule(CreateRuleRequest) returns (google.protobuf.Empty);
+  rpc DescribeRule(DescribeRuleRequest) returns (google.protobuf.Empty);
+  rpc ListRules(google.protobuf.Empty) returns (google.protobuf.Empty);
+  rpc RemoveRule(RemoveRuleRequest) returns (google.protobuf.Empty);
+}
+
+message CreateRuleRequest {
+  uint64 id = 1;
+  string name = 2;
+  uint64 user_id = 3;
+}
+
+message DescribeRuleRequest {
+  uint64 id = 1;
+}
+
+message RemoveRuleRequest {
+  uint64 id = 1;
+}

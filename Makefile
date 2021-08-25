@@ -10,20 +10,24 @@ deps:
 	go get -u github.com/onsi/gomega
 	go get -u gopkg.in/yaml.v2
 	go get -u github.com/golang/mock
+	go get -u github.com/rs/zerolog/log
 	go get -u github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
 	go get -u github.com/golang/protobuf/proto
 	go get -u github.com/golang/protobuf/protoc-gen-go
 	go get -u google.golang.org/grpc
 	go get -u google.golang.org/grpc/cmd/protoc-gen-go-grpc
+	go get -u google.golang.org/protobuf/reflect/protoreflect
+	go get -u google.golang.org/protobuf/runtime/protoimpl
+
 	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
 	go install github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger
 
 .PHONY: generate
 generate:
-	protoc -I vendor.protogen \
-	--go_out=pkg/rule --go_opt=paths=import \
-	--go-grpc_out=pkg/rule --go-grpc_opt=paths=import \
-	api/rule/rule.proto
+	protoc --proto_path=. -I vendor.protogen \
+	--go_out=pkg/api --go_opt=paths=import \
+	--go-grpc_out=pkg/api --go-grpc_opt=paths=import \
+	api/api.proto
 
 .PHONY: build
 build: deps
