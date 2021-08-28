@@ -6,19 +6,26 @@ import (
 	"net"
 
 	"github.com/ozonva/ova-rule-api/configs"
+	"github.com/ozonva/ova-rule-api/internal/repo"
+	"github.com/ozonva/ova-rule-api/internal/saver"
 	desc "github.com/ozonva/ova-rule-api/pkg/api/github.com/ozonva/ova-rule-api/pkg/ova-rule-api"
 	"google.golang.org/grpc"
 )
 
-type APIServer struct {
+type apiServer struct {
 	desc.UnimplementedAPIServer
+	repo  repo.Repo
+	saver saver.Saver
 }
 
-func NewAPIServer() desc.APIServer {
-	return &APIServer{}
+func NewAPIServer(repo repo.Repo, saver saver.Saver) desc.APIServer {
+	return &apiServer{
+		repo:  repo,
+		saver: saver,
+	}
 }
 
-func Run() error {
+func Run(apiServer *desc.APIServer) error {
 	address := fmt.Sprintf("%s:%s", configs.ServerConfig.Host, configs.ServerConfig.Port)
 	listen, err := net.Listen("tcp", address)
 	if err != nil {
@@ -26,9 +33,9 @@ func Run() error {
 	}
 
 	s := grpc.NewServer()
-	desc.RegisterAPIServer(s, NewAPIServer())
+	desc.RegisterAPIServer(s, *apiServer)
 
-	if err := s.Serve(listen); err != nil {
+	if err = s.Serve(listen); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
 

@@ -8,7 +8,7 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
-func (a *APIServer) ListRules(ctx context.Context, req *empty.Empty) (*emptypb.Empty, error) {
+func (a *apiServer) ListRules(ctx context.Context, req *empty.Empty) (*emptypb.Empty, error) {
 	log.Info().Msgf("ListRulesRequest: %+v", req)
 	return &emptypb.Empty{}, nil
 }

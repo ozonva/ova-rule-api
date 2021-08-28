@@ -18,6 +18,7 @@ deps:
 	go get -u google.golang.org/grpc/cmd/protoc-gen-go-grpc
 	go get -u google.golang.org/protobuf/reflect/protoreflect
 	go get -u google.golang.org/protobuf/runtime/protoimpl
+	go get -u github.com/jackc/pgx/v4
 
 	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
 	go install github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger

@@ -12,10 +12,12 @@ func TestConfigsLoad(t *testing.T) {
 		Port: "8000",
 	}
 	databaseCfg := Database{
-		Host:     "localhost",
-		Port:     "5432",
-		Username: "ova",
-		Password: "",
+		DBName:       "ova",
+		Host:         "localhost",
+		Port:         "5432",
+		Username:     "ova",
+		Password:     "iloveozon",
+		PoolMaxConns: 10,
 	}
 
 	Load()

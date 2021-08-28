@@ -8,7 +8,7 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
-func (a *APIServer) DescribeRule(ctx context.Context, req *desc.DescribeRuleRequest) (*emptypb.Empty, error) {
+func (a *apiServer) DescribeRule(ctx context.Context, req *desc.DescribeRuleRequest) (*emptypb.Empty, error) {
 	log.Info().Msgf("DescribeRuleRequest: %+v", req)
 	return &emptypb.Empty{}, nil
 }

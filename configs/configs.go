@@ -20,10 +20,12 @@ type Server struct {
 }
 
 type Database struct {
-	Host     string `yaml:"host"`
-	Port     string `yaml:"port"`
-	Username string `yaml:"user"`
-	Password string `yaml:"password"`
+	DBName       string `yaml:"dbname"`
+	Host         string `yaml:"host"`
+	Port         string `yaml:"port"`
+	Username     string `yaml:"user"`
+	Password     string `yaml:"password"`
+	PoolMaxConns int    `yaml:"pool_max_conns"`
 }
 
 func Load() {

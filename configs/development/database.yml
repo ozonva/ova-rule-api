@@ -1,4 +1,6 @@
+dbname: "ova"
 host: "localhost"
-port: 5432
+port: "5432"
 user: "ova"
-password: ""
+password: "iloveozon"
+pool_max_conns: 10
