@@ -1,6 +1,7 @@
 package configs
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"path"
@@ -65,4 +66,8 @@ func loadConfigFromFile(name string, config interface{}) {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
+}
+
+func (s *Server) GetAddress() string {
+	return fmt.Sprintf("%s:%s", s.Host, s.Port)
 }

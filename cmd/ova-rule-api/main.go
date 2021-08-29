@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/rs/zerolog/log"
 
 	"github.com/ozonva/ova-rule-api/configs"
@@ -12,7 +11,7 @@ func main() {
 	log.Info().Msg("Подгружаем конфиги...")
 	configs.Load()
 
-	log.Info().Msg(fmt.Sprintf("Запускаем gRPC сервер: %s%s", configs.ServerConfig.Host, configs.ServerConfig.Port))
+	log.Info().Msgf("Запускаем gRPC сервер: %s", configs.ServerConfig.GetAddress())
 
 	if err := api.Run(); err != nil {
 		log.Fatal().Err(err)

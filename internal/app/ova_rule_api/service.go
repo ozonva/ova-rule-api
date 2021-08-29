@@ -1,12 +1,13 @@
 package ova_rule_api
 
 import (
+	"fmt"
 	"log"
 	"net"
 
+	"github.com/ozonva/ova-rule-api/configs"
 	desc "github.com/ozonva/ova-rule-api/pkg/api/github.com/ozonva/ova-rule-api/pkg/ova-rule-api"
 	"google.golang.org/grpc"
-	"github.com/ozonva/ova-rule-api/configs"
 )
 
 type APIServer struct {
@@ -18,7 +19,8 @@ func NewAPIServer() desc.APIServer {
 }
 
 func Run() error {
-	listen, err := net.Listen("tcp", configs.ServerConfig.Port)
+	address := fmt.Sprintf("%s:%s", configs.ServerConfig.Host, configs.ServerConfig.Port)
+	listen, err := net.Listen("tcp", address)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
