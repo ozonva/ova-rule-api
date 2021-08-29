@@ -56,7 +56,7 @@ var _ = Describe("Saver", func() {
 				mockFlusher = mocks.NewMockFlusher(ctrl)
 				for i := 0; i < 3; i++ {
 					err := testSaver.Save(models.Rule{
-						ID: int64(i),
+						ID: uint64(i),
 					})
 					Expect(err).ShouldNot(HaveOccurred())
 				}

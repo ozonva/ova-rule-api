@@ -12,6 +12,7 @@ type Repo interface {
 	AddRules(rules []models.Rule) error
 	ListRules(limit, offset uint64) ([]models.Rule, error)
 	DescribeRule(ruleID uint64) (*models.Rule, error)
+	RemoveRule(ruleID uint64) error
 }
 
 func NewRepo(ctx context.Context, pool *pgxpool.Pool) Repo {
@@ -54,4 +55,14 @@ func (r *repo) DescribeRule(ruleID uint64) (*models.Rule, error) {
 	defer conn.Release()
 
 	return nil, nil
+}
+
+func (r *repo) RemoveRule(ruleID uint64) error {
+	conn, err := r.pool.Acquire(r.ctx)
+	if err != nil {
+		return err
+	}
+	defer conn.Release()
+
+	return nil
 }
