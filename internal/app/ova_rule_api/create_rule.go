@@ -23,7 +23,5 @@ func (a *apiServer) CreateRule(ctx context.Context, req *desc.CreateRuleRequest)
 		return nil, status.Errorf(codes.Internal, err.Error())
 	}
 
-	log.Info().Msg("Добавили правило в очередь на сохранение")
-
 	return &emptypb.Empty{}, nil
 }

@@ -30,6 +30,7 @@ func main() {
 	repo_ := repo.NewRepo(ctx, pool)
 	flusher_ := flusher.NewFlusher(10, repo_)
 	saver_ := saver.NewSaver(100, flusher_, time.Second)
+	saver_.Init()
 
 	log.Info().Msgf("Запускаем gRPC сервер: %s", configs.ServerConfig.GetAddress())
 	apiServer := api.NewAPIServer(repo_, saver_)
