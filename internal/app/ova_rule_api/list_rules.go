@@ -2,7 +2,6 @@ package ova_rule_api
 
 import (
 	"context"
-	"fmt"
 	desc "github.com/ozonva/ova-rule-api/pkg/api/github.com/ozonva/ova-rule-api/pkg/ova-rule-api"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -14,7 +13,7 @@ func (a *apiServer) ListRules(
 	ctx context.Context,
 	req *desc.ListRulesRequest,
 ) (*desc.ListRulesResponse, error) {
-	log.Info().Msg(fmt.Sprintf("ListRulesRequest: %+v", req))
+	log.Info().Msgf("ListRulesRequest: %+v", req)
 
 	rules, err := a.repo.ListRules(req.Limit, req.Offset)
 	if err != nil {

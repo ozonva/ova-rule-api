@@ -2,8 +2,6 @@ package ova_rule_api
 
 import (
 	"context"
-	"fmt"
-
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
@@ -14,7 +12,7 @@ import (
 )
 
 func (a *apiServer) RemoveRule(ctx context.Context, req *desc.RemoveRuleRequest) (*emptypb.Empty, error) {
-	log.Info().Msg(fmt.Sprintf("RemoveRuleRequest: %+v", req))
+	log.Info().Msgf("RemoveRuleRequest: %+v", req)
 
 	err := a.repo.RemoveRule(req.Id)
 	if err != nil {

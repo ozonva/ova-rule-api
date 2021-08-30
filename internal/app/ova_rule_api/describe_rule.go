@@ -2,8 +2,6 @@ package ova_rule_api
 
 import (
 	"context"
-	"fmt"
-
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
@@ -16,7 +14,7 @@ func (a *apiServer) DescribeRule(
 	ctx context.Context,
 	req *desc.DescribeRuleRequest,
 ) (*desc.DescribeRuleResponse, error) {
-	log.Info().Msg(fmt.Sprintf("DescribeRuleRequest: %+v", req))
+	log.Info().Msgf("DescribeRuleRequest: %+v", req)
 
 	rule, err := a.repo.DescribeRule(req.Id)
 	if err != nil {
