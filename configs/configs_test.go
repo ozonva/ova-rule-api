@@ -9,11 +9,11 @@ import (
 func TestConfigsLoad(t *testing.T) {
 	serverCfg := Server{
 		Host: "localhost",
-		Port: 8000,
+		Port: "8000",
 	}
 	databaseCfg := Database{
 		Host:     "localhost",
-		Port:     5432,
+		Port:     "5432",
 		Username: "ova",
 		Password: "",
 	}

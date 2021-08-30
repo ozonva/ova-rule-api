@@ -1,6 +1,7 @@
 package configs
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"path"
@@ -15,12 +16,12 @@ var DatabaseConfig *Database
 
 type Server struct {
 	Host string `yaml:"host"`
-	Port int    `yaml:"port"`
+	Port string `yaml:"port"`
 }
 
 type Database struct {
 	Host     string `yaml:"host"`
-	Port     int    `yaml:"port"`
+	Port     string `yaml:"port"`
 	Username string `yaml:"user"`
 	Password string `yaml:"password"`
 }
@@ -65,4 +66,8 @@ func loadConfigFromFile(name string, config interface{}) {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
+}
+
+func (s *Server) GetAddress() string {
+	return fmt.Sprintf("%s:%s", s.Host, s.Port)
 }
