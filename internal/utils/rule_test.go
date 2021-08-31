@@ -81,19 +81,19 @@ func TestSplitToBulksNegative(t *testing.T) {
 func TestMapRulesPositive(t *testing.T) {
 	cases := []struct {
 		rules    []models.Rule
-		expected map[uint64]models.Rule
+		expected map[int64]models.Rule
 	}{
 		{
 			rules:    []models.Rule{{UserID: 1}, {UserID: 2}, {UserID: 3}},
-			expected: map[uint64]models.Rule{1: {UserID: 1}, 2: {UserID: 2}, 3: {UserID: 3}},
+			expected: map[int64]models.Rule{1: {UserID: 1}, 2: {UserID: 2}, 3: {UserID: 3}},
 		},
 		{
 			rules:    []models.Rule{},
-			expected: map[uint64]models.Rule{},
+			expected: map[int64]models.Rule{},
 		},
 		{
 			rules:    nil,
-			expected: map[uint64]models.Rule{},
+			expected: map[int64]models.Rule{},
 		},
 	}
 

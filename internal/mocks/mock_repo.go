@@ -77,17 +77,3 @@ func (mr *MockRepoMockRecorder) ListRules(limit, offset interface{}) *gomock.Cal
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListRules", reflect.TypeOf((*MockRepo)(nil).ListRules), limit, offset)
 }
-
-// RemoveRule mocks base method.
-func (m *MockRepo) RemoveRule(ruleID uint64) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "RemoveRule", ruleID)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// RemoveRule indicates an expected call of RemoveRule.
-func (mr *MockRepoMockRecorder) RemoveRule(ruleID interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveRule", reflect.TypeOf((*MockRepo)(nil).RemoveRule), ruleID)
-}

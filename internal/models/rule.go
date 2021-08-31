@@ -3,10 +3,10 @@ package models
 import "fmt"
 
 type Rule struct {
-	ID     uint64
+	ID     int64
 	Name   string
 	Count  uint64
-	UserID uint64
+	UserID int64
 }
 
 func (r Rule) String() string {
