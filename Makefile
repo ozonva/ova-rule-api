@@ -5,6 +5,7 @@ all: generate test build
 
 .PHONY: deps
 deps:
+	go get -u github.com/pkg/errors
 	go get -u github.com/stretchr/testify
 	go get -u github.com/onsi/ginkgo
 	go get -u github.com/onsi/gomega
