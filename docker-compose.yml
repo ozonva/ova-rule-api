@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    environment:
+      CONFIG_DIR: docker
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+        - db
+    command: make run
+    networks:
+        - ozonva
+
+  db:
+    image: postgres:13
+    restart: always
+    ports:
+      - "127.0.0.1:5432:5432"
+    environment:
+      POSTGRES_PASSWORD: "iloveozon"
+      POSTGRES_USER: "ova"
+      POSTGRES_DB: "ova"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+        ozonva:
+            aliases:
+              - pg-ova.lan
+
+networks:
+  ozonva:
+      driver: bridge

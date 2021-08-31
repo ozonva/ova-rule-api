@@ -10,7 +10,7 @@ import (
 
 func Connect(ctx context.Context, config *configs.Database) (*pgxpool.Pool, error) {
 	dsn := fmt.Sprintf(
-		"postgres://%s:%s@%s:%s/%s?pool_max_conns=%d",
+		"postgres://%s:%s@%s:%s/%s?pool_max_conns=%d&sslmode=disable",
 		config.Username,
 		config.Password,
 		config.Host,

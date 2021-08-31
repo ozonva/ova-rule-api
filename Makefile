@@ -39,7 +39,7 @@ build: deps
 
 .PHONY: run
 run:
-	go run ./cmd/ova-rule-api
+	go run ./cmd/ova-rule-api/main.go
 
 .PHONY: lint
 lint:
@@ -54,3 +54,18 @@ mocks:
 	rm -rf ./internal/mocks/mock_*
 	mockgen -source=./internal/repo/repo.go -destination=./internal/mocks/mock_repo.go -package mocks
 	mockgen -source=./internal/flusher/flusher.go -destination=./internal/mocks/mock_flusher.go -package mocks
+
+.PHONY: migrate-up
+migrate-up:
+	cd migrations &&\
+ 	goose postgres "postgres://ova:iloveozon@localhost:5432/ova?sslmode=disable" up
+
+.PHONY: migrate-down
+migrate-down:
+	cd migrations &&\
+ 	goose postgres "postgres://ova:iloveozon@localhost:5432/ova?sslmode=disable" down
+
+.PHONY: migrate-status
+migrate-status:
+	cd migrations &&\
+ 	goose postgres "postgres://ova:iloveozon@localhost:5432/ova?sslmode=disable" status
