@@ -90,9 +90,9 @@ func createRules(number int) []models.Rule {
 
 	for i := 0; i < number; i++ {
 		result[i] = models.Rule{
-			ID:     int64(i),
+			ID:     uint64(i),
 			Name:   fmt.Sprintf("some rule %d", i),
-			UserID: int64(i),
+			UserID: uint64(i),
 		}
 	}
 

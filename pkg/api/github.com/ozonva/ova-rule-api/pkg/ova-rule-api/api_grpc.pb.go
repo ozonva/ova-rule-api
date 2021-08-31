@@ -20,8 +20,8 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type APIClient interface {
 	CreateRule(ctx context.Context, in *CreateRuleRequest, opts ...grpc.CallOption) (*empty.Empty, error)
-	DescribeRule(ctx context.Context, in *DescribeRuleRequest, opts ...grpc.CallOption) (*empty.Empty, error)
-	ListRules(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*empty.Empty, error)
+	DescribeRule(ctx context.Context, in *DescribeRuleRequest, opts ...grpc.CallOption) (*DescribeRuleResponse, error)
+	ListRules(ctx context.Context, in *ListRulesRequest, opts ...grpc.CallOption) (*ListRulesResponse, error)
 	RemoveRule(ctx context.Context, in *RemoveRuleRequest, opts ...grpc.CallOption) (*empty.Empty, error)
 }
 
@@ -42,8 +42,8 @@ func (c *aPIClient) CreateRule(ctx context.Context, in *CreateRuleRequest, opts 
 	return out, nil
 }
 
-func (c *aPIClient) DescribeRule(ctx context.Context, in *DescribeRuleRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
-	out := new(empty.Empty)
+func (c *aPIClient) DescribeRule(ctx context.Context, in *DescribeRuleRequest, opts ...grpc.CallOption) (*DescribeRuleResponse, error) {
+	out := new(DescribeRuleResponse)
 	err := c.cc.Invoke(ctx, "/ova.rule.api.API/DescribeRule", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -51,8 +51,8 @@ func (c *aPIClient) DescribeRule(ctx context.Context, in *DescribeRuleRequest, o
 	return out, nil
 }
 
-func (c *aPIClient) ListRules(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*empty.Empty, error) {
-	out := new(empty.Empty)
+func (c *aPIClient) ListRules(ctx context.Context, in *ListRulesRequest, opts ...grpc.CallOption) (*ListRulesResponse, error) {
+	out := new(ListRulesResponse)
 	err := c.cc.Invoke(ctx, "/ova.rule.api.API/ListRules", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -74,8 +74,8 @@ func (c *aPIClient) RemoveRule(ctx context.Context, in *RemoveRuleRequest, opts 
 // for forward compatibility
 type APIServer interface {
 	CreateRule(context.Context, *CreateRuleRequest) (*empty.Empty, error)
-	DescribeRule(context.Context, *DescribeRuleRequest) (*empty.Empty, error)
-	ListRules(context.Context, *empty.Empty) (*empty.Empty, error)
+	DescribeRule(context.Context, *DescribeRuleRequest) (*DescribeRuleResponse, error)
+	ListRules(context.Context, *ListRulesRequest) (*ListRulesResponse, error)
 	RemoveRule(context.Context, *RemoveRuleRequest) (*empty.Empty, error)
 	mustEmbedUnimplementedAPIServer()
 }
@@ -87,10 +87,10 @@ type UnimplementedAPIServer struct {
 func (UnimplementedAPIServer) CreateRule(context.Context, *CreateRuleRequest) (*empty.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateRule not implemented")
 }
-func (UnimplementedAPIServer) DescribeRule(context.Context, *DescribeRuleRequest) (*empty.Empty, error) {
+func (UnimplementedAPIServer) DescribeRule(context.Context, *DescribeRuleRequest) (*DescribeRuleResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DescribeRule not implemented")
 }
-func (UnimplementedAPIServer) ListRules(context.Context, *empty.Empty) (*empty.Empty, error) {
+func (UnimplementedAPIServer) ListRules(context.Context, *ListRulesRequest) (*ListRulesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListRules not implemented")
 }
 func (UnimplementedAPIServer) RemoveRule(context.Context, *RemoveRuleRequest) (*empty.Empty, error) {
@@ -146,7 +146,7 @@ func _API_DescribeRule_Handler(srv interface{}, ctx context.Context, dec func(in
 }
 
 func _API_ListRules_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(empty.Empty)
+	in := new(ListRulesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -158,7 +158,7 @@ func _API_ListRules_Handler(srv interface{}, ctx context.Context, dec func(inter
 		FullMethod: "/ova.rule.api.API/ListRules",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(APIServer).ListRules(ctx, req.(*empty.Empty))
+		return srv.(APIServer).ListRules(ctx, req.(*ListRulesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

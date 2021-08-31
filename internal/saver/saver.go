@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/onsi/ginkgo"
+	"github.com/rs/zerolog/log"
 
 	"github.com/ozonva/ova-rule-api/internal/flusher"
 	"github.com/ozonva/ova-rule-api/internal/models"
@@ -69,6 +70,8 @@ func (s *saver) Save(rule models.Rule) error {
 
 	s.buffer = append(s.buffer, rule)
 
+	log.Info().Msg("Добавили правило в очередь на сохранение")
+
 	return nil
 }
 
@@ -80,11 +83,17 @@ func (s *saver) flush() {
 	s.Lock()
 	defer s.Unlock()
 
+	if len(s.buffer) == 0 {
+		// Нечего сохранять, на выход.
+		return
+	}
+
 	unsaved := s.flusher.Flush(s.buffer)
+	log.Info().Msg("Сохранили пачку правил")
 
 	s.buffer = s.buffer[:0]
 
 	if len(unsaved) > 0 {
-		s.buffer = append(s.buffer, unsaved...)
+		log.Warn().Msg("Не смогли сохранить часть правил")
 	}
 }
