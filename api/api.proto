@@ -8,15 +8,9 @@ option go_package = "github.com/ozonva/ova-rule-api/pkg/ova-rule-api;ova_rule_ap
 
 service API {
   rpc CreateRule(CreateRuleRequest) returns (google.protobuf.Empty);
-  rpc DescribeRule(DescribeRuleRequest) returns (DescribeRuleResponse);
-  rpc ListRules(ListRulesRequest) returns (ListRulesResponse);
+  rpc DescribeRule(DescribeRuleRequest) returns (google.protobuf.Empty);
+  rpc ListRules(google.protobuf.Empty) returns (google.protobuf.Empty);
   rpc RemoveRule(RemoveRuleRequest) returns (google.protobuf.Empty);
-}
-
-message Rule {
-  uint64 id = 1;
-  string name = 2;
-  uint64 user_id = 3;
 }
 
 message CreateRuleRequest {
@@ -27,19 +21,6 @@ message CreateRuleRequest {
 
 message DescribeRuleRequest {
   uint64 id = 1;
-}
-
-message DescribeRuleResponse {
-  Rule result = 1;
-}
-
-message ListRulesRequest {
-  uint64 limit = 1;
-  uint64 offset = 2;
-}
-
-message ListRulesResponse {
-  repeated Rule result = 1;
 }
 
 message RemoveRuleRequest {
