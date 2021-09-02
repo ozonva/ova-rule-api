@@ -45,3 +45,9 @@ func validateRemoveRuleRequest(req *desc.RemoveRuleRequest) error {
 
 	return nil
 }
+
+func validateMultiCreateRuleRequest(req *desc.MultiCreateRuleRequest) error {
+	// TODO: имплементировать
+
+	return nil
+}

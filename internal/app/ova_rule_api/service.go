@@ -8,7 +8,6 @@ import (
 	"google.golang.org/grpc"
 
 	"github.com/ozonva/ova-rule-api/configs"
-	"github.com/ozonva/ova-rule-api/internal/kafka"
 	"github.com/ozonva/ova-rule-api/internal/repo"
 	"github.com/ozonva/ova-rule-api/internal/saver"
 	desc "github.com/ozonva/ova-rule-api/pkg/api/github.com/ozonva/ova-rule-api/pkg/ova-rule-api"
@@ -18,18 +17,15 @@ type apiServer struct {
 	desc.UnimplementedAPIServer
 	repo     repo.Repo
 	saver    saver.Saver
-	producer kafka.AsyncProducer
 }
 
 func NewAPIServer(
 	repo repo.Repo,
 	saver saver.Saver,
-	producer kafka.AsyncProducer,
 ) desc.APIServer {
 	return &apiServer{
 		repo:     repo,
 		saver:    saver,
-		producer: producer,
 	}
 }
 

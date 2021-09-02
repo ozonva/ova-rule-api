@@ -2,6 +2,7 @@ package repo
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/rs/zerolog/log"
 
@@ -9,6 +10,7 @@ import (
 	"github.com/georgysavva/scany/pgxscan"
 	"github.com/jackc/pgx/v4/pgxpool"
 
+	"github.com/ozonva/ova-rule-api/internal/kafka"
 	"github.com/ozonva/ova-rule-api/internal/models"
 )
 
@@ -20,16 +22,18 @@ type Repo interface {
 	RemoveRule(ruleID uint64) error
 }
 
-func NewRepo(ctx context.Context, pool *pgxpool.Pool) Repo {
+func NewRepo(ctx context.Context, pool *pgxpool.Pool, producer kafka.AsyncProducer) Repo {
 	return &repo{
-		ctx:  ctx,
-		pool: pool,
+		ctx:      ctx,
+		pool:     pool,
+		producer: producer,
 	}
 }
 
 type repo struct {
-	ctx  context.Context
-	pool *pgxpool.Pool
+	ctx      context.Context
+	pool     *pgxpool.Pool
+	producer kafka.AsyncProducer
 }
 
 func (r *repo) AddRules(rules []models.Rule) error {
@@ -53,6 +57,26 @@ func (r *repo) AddRules(rules []models.Rule) error {
 	if err != nil {
 		log.Info().Msg(err.Error())
 		return err
+	}
+
+	for _, rule := range rules {
+		body := struct {
+			Name   string `json:"name"`
+			UserID uint64 `json:"user_id"`
+		}{
+			Name:   rule.Name,
+			UserID: rule.UserID,
+		}
+
+		msg, err := encodeMessageToJSON(body)
+		if err != nil {
+			return err
+		}
+
+		preparedMsg := kafka.PrepareMessage(kafka.CreateRuleTopic, msg)
+		r.producer.SendMessageWithContext(r.ctx, preparedMsg)
+
+		log.Info().Msgf("Отправили в очередь событие про создание нового правила: %s", rule.Name)
 	}
 
 	return nil
@@ -134,5 +158,31 @@ func (r *repo) RemoveRule(ruleID uint64) error {
 		return err
 	}
 
+	body := struct {
+		ID uint64 `json:"id"`
+	}{
+		ID: ruleID,
+	}
+
+	msg, err := encodeMessageToJSON(body)
+	if err != nil {
+		return err
+	}
+
+	preparedMsg := kafka.PrepareMessage(kafka.RemoveRuleTopic, msg)
+	r.producer.SendMessageWithContext(r.ctx, preparedMsg)
+
+	log.Info().Msgf("Отправили в очередь событие про удаление правила с id=%d", ruleID)
+
 	return nil
+}
+
+func encodeMessageToJSON(body interface{}) (string, error) {
+	result, err := json.Marshal(body)
+	if err != nil {
+		log.Error().Msg("encode error")
+		return "", err
+	}
+
+	return string(result), nil
 }

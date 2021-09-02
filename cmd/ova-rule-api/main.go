@@ -33,13 +33,13 @@ func main() {
 		log.Fatal().Err(err)
 	}
 
-	repo_ := repo.NewRepo(ctx, pool)
+	repo_ := repo.NewRepo(ctx, pool, producer)
 	flusher_ := flusher.NewFlusher(10, repo_)
 	saver_ := saver.NewSaver(100, flusher_, time.Second)
 	saver_.Init()
 
 	log.Info().Msgf("Запускаем gRPC сервер: %s", configs.ServerConfig.GetAddress())
-	apiServer := api.NewAPIServer(repo_, saver_, producer)
+	apiServer := api.NewAPIServer(repo_, saver_)
 	if err = api.Run(&apiServer); err != nil {
 		log.Fatal().Err(err)
 	}
