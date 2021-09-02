@@ -47,7 +47,19 @@ func validateRemoveRuleRequest(req *desc.RemoveRuleRequest) error {
 }
 
 func validateMultiCreateRuleRequest(req *desc.MultiCreateRuleRequest) error {
-	// TODO: имплементировать
+	for _, rule := range req.Rules {
+		if rule.Id == 0 {
+			return errors.Wrap(notPositiveIdError, "rule")
+		}
+	}
+
+	return nil
+}
+
+func validateUpdateRuleRequest(req *desc.UpdateRuleRequest) error {
+	if req.Rule.Id == 0 {
+		return errors.Wrap(notPositiveIdError, "rule")
+	}
 
 	return nil
 }

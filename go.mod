@@ -16,13 +16,17 @@ require (
 	github.com/klauspost/compress v1.13.5 // indirect
 	github.com/onsi/ginkgo v1.16.4
 	github.com/onsi/gomega v1.16.0
+	github.com/opentracing/opentracing-go v1.2.0 // indirect
 	github.com/pierrec/lz4 v2.6.1+incompatible // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/rs/zerolog v1.24.0
 	github.com/stretchr/objx v0.3.0 // indirect
 	github.com/stretchr/testify v1.7.0
+	github.com/uber/jaeger-client-go v2.29.1+incompatible // indirect
+	github.com/uber/jaeger-lib v2.4.1+incompatible // indirect
+	go.uber.org/atomic v1.9.0 // indirect
 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 // indirect
-	golang.org/x/net v0.0.0-20210825183410-e898025ed96a // indirect
+	golang.org/x/net v0.0.0-20210902165921-8d991716f632 // indirect
 	golang.org/x/sys v0.0.0-20210902050250-f475640dd07b // indirect
 	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/genproto v0.0.0-20210831024726-fe130286e0e2 // indirect

@@ -20,6 +20,7 @@ type Repo interface {
 	ListRules(limit, offset uint64) ([]models.Rule, error)
 	DescribeRule(ruleID uint64) (*models.Rule, error)
 	RemoveRule(ruleID uint64) error
+	UpdateRule(rule models.Rule) error
 }
 
 func NewRepo(ctx context.Context, pool *pgxpool.Pool, producer kafka.AsyncProducer) Repo {
@@ -173,6 +174,53 @@ func (r *repo) RemoveRule(ruleID uint64) error {
 	r.producer.SendMessageWithContext(r.ctx, preparedMsg)
 
 	log.Info().Msgf("Отправили в очередь событие про удаление правила с id=%d", ruleID)
+
+	return nil
+}
+
+func (r *repo) UpdateRule(rule models.Rule) error {
+	conn, err := r.pool.Acquire(r.ctx)
+	if err != nil {
+		return err
+	}
+	defer conn.Release()
+
+	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
+	sql, args, err := psql.Update("rule").
+		Set("name", rule.Name).
+		Set("user_id", rule.UserID).
+		Where(sq.Eq{"id": rule.ID}).
+		ToSql()
+	if err != nil {
+		return err
+	}
+
+	log.Info().Msgf("query: %s; args: %s", sql, args)
+
+	_, err = conn.Exec(r.ctx, sql, args...)
+	if err != nil {
+		return err
+	}
+
+	body := struct {
+		ID     uint64 `json:"id"`
+		Name   string `json:"name"`
+		UserID uint64 `json:"user_id"`
+	}{
+		ID:     rule.ID,
+		Name:   rule.Name,
+		UserID: rule.UserID,
+	}
+
+	msg, err := encodeMessageToJSON(body)
+	if err != nil {
+		return err
+	}
+
+	preparedMsg := kafka.PrepareMessage(kafka.UpdateRuleTopic, msg)
+	r.producer.SendMessageWithContext(r.ctx, preparedMsg)
+
+	log.Info().Msgf("Отправили в очередь событие про обновление правила с id=%d", rule.ID)
 
 	return nil
 }

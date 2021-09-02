@@ -15,7 +15,7 @@ import (
 )
 
 func (a *apiServer) MultiCreateRule(ctx context.Context, req *desc.MultiCreateRuleRequest) (*empty.Empty, error) {
-	log.Info().Msgf("CreateRuleRequest: %+v", req)
+	log.Info().Msgf("MultiCreateRule: %+v", req)
 
 	if err := validateMultiCreateRuleRequest(req); err != nil {
 		return nil, errors.Wrap(err, "invalid request")
