@@ -19,9 +19,13 @@ func TestConfigsLoad(t *testing.T) {
 		Password:     "iloveozon",
 		PoolMaxConns: 10,
 	}
+	kafkaCfg := Kafka{
+		Brokers: []string{"127.0.0.1:9092"},
+	}
 
 	Load()
 
 	assert.Equal(t, serverCfg, *ServerConfig)
 	assert.Equal(t, databaseCfg, *DatabaseConfig)
+	assert.Equal(t, kafkaCfg, *KafkaConfig)
 }

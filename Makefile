@@ -22,6 +22,7 @@ deps:
 	go get -u github.com/jackc/pgx/v4
 	go get -u github.com/georgysavva/scany
 	go get -u github.com/Masterminds/squirrel
+	go get -u github.com/Shopify/sarama
 
 	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
 	go install github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger

@@ -13,6 +13,7 @@ import (
 
 var ServerConfig *Server
 var DatabaseConfig *Database
+var KafkaConfig *Kafka
 
 type Server struct {
 	Host string `yaml:"host"`
@@ -28,13 +29,19 @@ type Database struct {
 	PoolMaxConns int    `yaml:"pool_max_conns"`
 }
 
+type Kafka struct {
+	Brokers []string `yaml:"brokers"`
+}
+
 func Load() {
 	ServerConfig = &Server{}
 	DatabaseConfig = &Database{}
+	KafkaConfig = &Kafka{}
 
 	mapper := map[string]interface{}{
 		"database": DatabaseConfig,
 		"server":   ServerConfig,
+		"kafka": KafkaConfig,
 	}
 
 	configDir := getConfigDir()

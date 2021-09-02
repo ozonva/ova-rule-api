@@ -1,20 +1,6 @@
 version: "3.8"
 
 services:
-  app:
-    build: .
-    environment:
-      CONFIG_DIR: docker
-    restart: always
-    ports:
-      - "8000:8000"
-    depends_on:
-        - db
-        - kafka
-    command: make run
-    networks:
-        - ozonva
-
   db:
     image: postgres:13
     restart: always
