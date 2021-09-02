@@ -69,3 +69,11 @@ migrate-down:
 migrate-status:
 	cd migrations &&\
  	goose postgres "postgres://ova:iloveozon@localhost:5432/ova?sslmode=disable" status
+
+.PHONY: up
+up:
+	docker-compose up
+
+.PHONY: down
+down:
+	docker-compose down
