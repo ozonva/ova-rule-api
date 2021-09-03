@@ -57,6 +57,8 @@ mocks:
 	rm -rf ./internal/mocks/mock_*
 	mockgen -source=./internal/repo/repo.go -destination=./internal/mocks/mock_repo.go -package mocks
 	mockgen -source=./internal/flusher/flusher.go -destination=./internal/mocks/mock_flusher.go -package mocks
+	mockgen -source=./internal/kafka/producer.go -destination=./internal/mocks/mock_producer.go -package mocks
+	mockgen -source=./internal/metrics/metrics.go -destination=./internal/mocks/mock_metrics.go -package mocks
 
 .PHONY: migrate-up
 migrate-up:
