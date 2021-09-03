@@ -2,11 +2,13 @@ package ova_rule_api
 
 import (
 	"context"
-	desc "github.com/ozonva/ova-rule-api/pkg/api/github.com/ozonva/ova-rule-api/pkg/ova-rule-api"
+
+	"github.com/pkg/errors"
+	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/rs/zerolog/log"
+	desc "github.com/ozonva/ova-rule-api/pkg/api/github.com/ozonva/ova-rule-api/pkg/ova-rule-api"
 )
 
 func (a *apiServer) ListRules(
@@ -14,6 +16,10 @@ func (a *apiServer) ListRules(
 	req *desc.ListRulesRequest,
 ) (*desc.ListRulesResponse, error) {
 	log.Info().Msgf("ListRulesRequest: %+v", req)
+
+	if err := validateListRulesRequest(req); err != nil {
+		return nil, errors.Wrap(err, "invalid request")
+	}
 
 	rules, err := a.repo.ListRules(req.Limit, req.Offset)
 	if err != nil {

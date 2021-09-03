@@ -2,17 +2,22 @@ package ova_rule_api
 
 import (
 	"context"
+
+	"github.com/pkg/errors"
+	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-
-	"github.com/rs/zerolog/log"
+	"google.golang.org/protobuf/types/known/emptypb"
 
 	desc "github.com/ozonva/ova-rule-api/pkg/api/github.com/ozonva/ova-rule-api/pkg/ova-rule-api"
-	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 func (a *apiServer) RemoveRule(ctx context.Context, req *desc.RemoveRuleRequest) (*emptypb.Empty, error) {
 	log.Info().Msgf("RemoveRuleRequest: %+v", req)
+
+	if err := validateRemoveRuleRequest(req); err != nil {
+		return nil, errors.Wrap(err, "invalid request")
+	}
 
 	err := a.repo.RemoveRule(req.Id)
 	if err != nil {

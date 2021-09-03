@@ -37,8 +37,8 @@ var _ = Describe("Service", func() {
 		ctrl.Finish()
 	})
 
-	Context("CreateRule", func() {
-		It("успешное сохранение записи", func() {
+	Context("Позитивные кейсы.", func() {
+		It("CreateRule", func() {
 			someRule := models.Rule{ID: 1, Name: "awesome", UserID: 777}
 			mockRepo.EXPECT().AddRules([]models.Rule{someRule}).Times(1)
 
@@ -89,6 +89,40 @@ var _ = Describe("Service", func() {
 				Id: uint64(777),
 			})
 			Expect(err).ShouldNot(HaveOccurred())
+		})
+	})
+
+	Context("Негативные кейсы. Ошибки валидации.", func() {
+		It("CreateRule", func() {
+			_, err := api.CreateRule(ctx, &desc.CreateRuleRequest{
+				Id:     0,
+				Name:   "",
+				UserId: 0,
+			})
+
+			Expect(err).Should(HaveOccurred())
+		})
+
+		It("DescribeRule", func() {
+			_, err := api.DescribeRule(ctx, &desc.DescribeRuleRequest{
+				Id: 0,
+			})
+			Expect(err).Should(HaveOccurred())
+		})
+
+		It("ListRules", func() {
+			_, err := api.ListRules(ctx, &desc.ListRulesRequest{
+				Limit:  uint64(0),
+				Offset: uint64(0),
+			})
+			Expect(err).Should(HaveOccurred())
+		})
+
+		It("RemoveRule", func() {
+			_, err := api.RemoveRule(ctx, &desc.RemoveRuleRequest{
+				Id: uint64(0),
+			})
+			Expect(err).Should(HaveOccurred())
 		})
 	})
 })

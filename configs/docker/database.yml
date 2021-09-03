@@ -1,0 +1,6 @@
+dbname: "ova"
+host: "pg-ova.lan"
+port: "5432"
+user: "ova"
+password: "iloveozon"
+pool_max_conns: 10
