@@ -1,0 +1,2 @@
+host: "prometheus"
+port: "9102"

@@ -26,7 +26,10 @@ func TestConfigsLoad(t *testing.T) {
 		Host: "localhost",
 		Port: "6831",
 	}
-
+	prometheusCfg := Prometheus{
+		Host: "localhost",
+		Port: "9102",
+	}
 
 	Load()
 
@@ -34,4 +37,5 @@ func TestConfigsLoad(t *testing.T) {
 	assert.Equal(t, databaseCfg, *DatabaseConfig)
 	assert.Equal(t, kafkaCfg, *KafkaConfig)
 	assert.Equal(t, jaegerCfg, *JaegerConfig)
+	assert.Equal(t, prometheusCfg, *PrometheusConfig)
 }

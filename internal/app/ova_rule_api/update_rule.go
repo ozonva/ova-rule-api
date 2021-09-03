@@ -29,6 +29,8 @@ func (a *apiServer) UpdateRule(ctx context.Context, req *desc.UpdateRuleRequest)
 		return nil, status.Errorf(codes.Internal, err.Error())
 	}
 
+	a.metrics.UpdateRuleCounterInc()
+
 	log.Info().Msgf("Правило с id=%d обновлено", req.Rule.Id)
 
 	return &emptypb.Empty{}, nil

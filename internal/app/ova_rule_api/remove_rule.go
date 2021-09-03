@@ -23,6 +23,8 @@ func (a *apiServer) RemoveRule(ctx context.Context, req *desc.RemoveRuleRequest)
 		return nil, status.Errorf(codes.Internal, err.Error())
 	}
 
+	a.metrics.RemoveRuleCounterInc()
+
 	log.Info().Msgf("Правило с id=%d удалено", req.Id)
 
 	return &emptypb.Empty{}, nil
