@@ -22,10 +22,16 @@ func TestConfigsLoad(t *testing.T) {
 	kafkaCfg := Kafka{
 		Brokers: []string{"127.0.0.1:9092"},
 	}
+	jaegerCfg := Jaeger{
+		Host: "localhost",
+		Port: "6831",
+	}
+
 
 	Load()
 
 	assert.Equal(t, serverCfg, *ServerConfig)
 	assert.Equal(t, databaseCfg, *DatabaseConfig)
 	assert.Equal(t, kafkaCfg, *KafkaConfig)
+	assert.Equal(t, jaegerCfg, *JaegerConfig)
 }

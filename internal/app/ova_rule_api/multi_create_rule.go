@@ -2,6 +2,8 @@ package ova_rule_api
 
 import (
 	"context"
+
+	"github.com/opentracing/opentracing-go"
 	"github.com/ozonva/ova-rule-api/internal/models"
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
@@ -20,6 +22,9 @@ func (a *apiServer) MultiCreateRule(ctx context.Context, req *desc.MultiCreateRu
 	if err := validateMultiCreateRuleRequest(req); err != nil {
 		return nil, errors.Wrap(err, "invalid request")
 	}
+
+	span, _ := opentracing.StartSpanFromContext(ctx, "MultiCreateRule")
+	defer span.Finish()
 
 	for _, rule := range req.Rules {
 		err := a.saver.Save(models.Rule{

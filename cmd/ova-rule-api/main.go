@@ -5,6 +5,7 @@ import (
 	"github.com/ozonva/ova-rule-api/internal/flusher"
 	"github.com/ozonva/ova-rule-api/internal/kafka"
 	"github.com/ozonva/ova-rule-api/internal/saver"
+	"github.com/ozonva/ova-rule-api/internal/tracer"
 	"time"
 
 	"github.com/rs/zerolog/log"
@@ -32,6 +33,12 @@ func main() {
 	if err != nil {
 		log.Fatal().Err(err)
 	}
+
+	closer, err := tracer.InitTracer()
+	if err != nil {
+		log.Fatal().Err(err)
+	}
+	defer closer.Close()
 
 	repo_ := repo.NewRepo(ctx, pool, producer)
 	flusher_ := flusher.NewFlusher(10, repo_)

@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 
+	"github.com/opentracing/opentracing-go"
 	"github.com/rs/zerolog/log"
 
 	sq "github.com/Masterminds/squirrel"
@@ -43,6 +44,10 @@ func (r *repo) AddRules(rules []models.Rule) error {
 		return err
 	}
 	defer conn.Release()
+
+	span, _ := opentracing.StartSpanFromContext(r.ctx, "AddRules")
+	span.SetTag("size", len(rules))
+	defer span.Finish()
 
 	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
 

@@ -1,0 +1,2 @@
+host: "jaeger"
+port: "6831"

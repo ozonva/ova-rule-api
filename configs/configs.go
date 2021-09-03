@@ -14,6 +14,7 @@ import (
 var ServerConfig *Server
 var DatabaseConfig *Database
 var KafkaConfig *Kafka
+var JaegerConfig *Jaeger
 
 type Server struct {
 	Host string `yaml:"host"`
@@ -33,15 +34,22 @@ type Kafka struct {
 	Brokers []string `yaml:"brokers"`
 }
 
+type Jaeger struct {
+	Host string `yaml:"host"`
+	Port string `yaml:"port"`
+}
+
 func Load() {
 	ServerConfig = &Server{}
 	DatabaseConfig = &Database{}
 	KafkaConfig = &Kafka{}
+	JaegerConfig = &Jaeger{}
 
 	mapper := map[string]interface{}{
 		"database": DatabaseConfig,
 		"server":   ServerConfig,
 		"kafka": KafkaConfig,
+		"jaeger": JaegerConfig,
 	}
 
 	configDir := getConfigDir()
