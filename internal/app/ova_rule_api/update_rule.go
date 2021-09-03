@@ -2,6 +2,7 @@ package ova_rule_api
 
 import (
 	"context"
+
 	"github.com/ozonva/ova-rule-api/internal/models"
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
@@ -20,8 +21,8 @@ func (a *apiServer) UpdateRule(ctx context.Context, req *desc.UpdateRuleRequest)
 	}
 
 	rule := models.Rule{
-		ID: req.Rule.Id,
-		Name: req.Rule.Name,
+		ID:     req.Rule.Id,
+		Name:   req.Rule.Name,
 		UserID: req.Rule.UserId,
 	}
 	err := a.repo.UpdateRule(rule)

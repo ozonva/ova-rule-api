@@ -46,7 +46,11 @@ run:
 
 .PHONY: lint
 lint:
-	golangci-lint run -v
+	golangci-lint run ./...
+
+.PHONY: lint-fix
+lint-fix:
+	golangci-lint run ./... --fix
 
 .PHONY: test
 test: mocks

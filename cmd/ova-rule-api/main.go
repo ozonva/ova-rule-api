@@ -2,12 +2,13 @@ package main
 
 import (
 	"context"
+	"time"
+
 	"github.com/ozonva/ova-rule-api/internal/flusher"
 	"github.com/ozonva/ova-rule-api/internal/kafka"
 	"github.com/ozonva/ova-rule-api/internal/metrics"
 	"github.com/ozonva/ova-rule-api/internal/saver"
 	"github.com/ozonva/ova-rule-api/internal/tracer"
-	"time"
 
 	"github.com/rs/zerolog/log"
 
@@ -24,6 +25,7 @@ func main() {
 	configs.Load()
 
 	log.Info().Msg("Подключаемся к базе...")
+
 	pool, err := db.Connect(ctx, configs.DatabaseConfig)
 	if err != nil {
 		log.Fatal().Err(err)
@@ -41,16 +43,17 @@ func main() {
 	}
 	defer closer.Close()
 
-	metrics_ := metrics.NewMetrics()
-	repo_ := repo.NewRepo(ctx, pool, producer)
-	flusher_ := flusher.NewFlusher(10, repo_)
-	saver_ := saver.NewSaver(100, flusher_, time.Second)
-	saver_.Init()
+	ruleMetrics := metrics.NewMetrics()
+	ruleRepo := repo.NewRepo(ctx, pool, producer)
+	ruleFlusher := flusher.NewFlusher(configs.ServerConfig.FlusherChunkSize, ruleRepo)
+	ruleSaver := saver.NewSaver(configs.ServerConfig.SaverCapacity, ruleFlusher, time.Second)
+	ruleSaver.Init()
 
 	metrics.RunServer()
 
 	log.Info().Msgf("Запускаем gRPC сервер: %s", configs.ServerConfig.GetAddress())
-	apiServer := api.NewAPIServer(repo_, saver_, metrics_)
+
+	apiServer := api.NewAPIServer(ruleRepo, ruleSaver, ruleMetrics)
 	if err = api.Run(&apiServer); err != nil {
 		log.Fatal().Err(err)
 	}

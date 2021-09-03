@@ -18,8 +18,10 @@ var JaegerConfig *Jaeger
 var PrometheusConfig *Prometheus
 
 type Server struct {
-	Host string `yaml:"host"`
-	Port string `yaml:"port"`
+	Host             string `yaml:"host"`
+	Port             string `yaml:"port"`
+	FlusherChunkSize int    `yaml:"flusher_chunk_size"`
+	SaverCapacity    uint   `yaml:"saver_capacity"`
 }
 
 type Database struct {
@@ -87,6 +89,7 @@ func loadConfigFromFile(name string, config interface{}) {
 	defer f.Close()
 
 	decoder := yaml.NewDecoder(f)
+
 	err = decoder.Decode(config)
 	if err != nil {
 		log.Fatal(err.Error())

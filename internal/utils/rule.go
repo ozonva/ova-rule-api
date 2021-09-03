@@ -12,12 +12,13 @@ func SplitToBulks(rules []models.Rule, batchSize int) ([][]models.Rule, error) {
 		return nil, errors.New("batchSize must be positive number")
 	}
 
-	if rules == nil || len(rules) == 0 {
+	if len(rules) == 0 {
 		return nil, errors.New("rules is empty or nil")
 	}
 
 	rulesLength := len(rules)
 	bulksLength := rulesLength / batchSize
+
 	if bulksLength == 0 || rulesLength%batchSize > 0 {
 		bulksLength++
 	}
@@ -27,9 +28,11 @@ func SplitToBulks(rules []models.Rule, batchSize int) ([][]models.Rule, error) {
 	for i := 0; i < bulksLength; i++ {
 		start := i * batchSize
 		end := i*batchSize + batchSize
+
 		if end > rulesLength {
 			end = rulesLength
 		}
+
 		bulks[i] = rules[start:end]
 	}
 
@@ -44,6 +47,7 @@ func MapRules(rules []models.Rule) (map[uint64]models.Rule, error) {
 		if _, ok := result[rule.UserID]; ok {
 			return nil, errors.New("duplicate key")
 		}
+
 		result[rule.UserID] = rule
 	}
 

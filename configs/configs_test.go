@@ -7,9 +7,13 @@ import (
 )
 
 func TestConfigsLoad(t *testing.T) {
+	t.Parallel()
+
 	serverCfg := Server{
-		Host: "localhost",
-		Port: "8000",
+		Host:             "localhost",
+		Port:             "8000",
+		FlusherChunkSize: 10,
+		SaverCapacity:    100,
 	}
 	databaseCfg := Database{
 		DBName:       "ova",

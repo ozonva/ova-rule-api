@@ -18,6 +18,7 @@ func Connect(ctx context.Context, config *configs.Database) (*pgxpool.Pool, erro
 		config.DBName,
 		config.PoolMaxConns,
 	)
+
 	pgxConfig, err := pgxpool.ParseConfig(dsn)
 	if err != nil {
 		return nil, err

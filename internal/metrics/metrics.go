@@ -20,15 +20,15 @@ type metrics struct {
 func NewMetrics() Metrics {
 	return &metrics{
 		createRuleCounter: promauto.NewCounter(prometheus.CounterOpts{
-			Name: "create_rule",
+			Name: "create_rule_total",
 			Help: "Количество созданий правил",
 		}),
 		updateRuleCounter: promauto.NewCounter(prometheus.CounterOpts{
-			Name: "update_rule",
+			Name: "update_rule_total",
 			Help: "Количество обновлений правил",
 		}),
 		removeRuleCounter: promauto.NewCounter(prometheus.CounterOpts{
-			Name: "remove_rule",
+			Name: "remove_rule_total",
 			Help: "Количество удалений правил",
 		}),
 	}

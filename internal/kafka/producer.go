@@ -2,6 +2,7 @@ package kafka
 
 import (
 	"context"
+
 	"github.com/Shopify/sarama"
 )
 
@@ -19,7 +20,7 @@ type asyncProducer struct {
 	sarama.AsyncProducer
 }
 
-func NewAsyncProducer(brokers []string) (*asyncProducer, error) {
+func NewAsyncProducer(brokers []string) (AsyncProducer, error) {
 	config := sarama.NewConfig()
 	config.Producer.Partitioner = sarama.NewRandomPartitioner
 	config.Producer.RequiredAcks = sarama.WaitForAll
