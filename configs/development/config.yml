@@ -1,0 +1,25 @@
+server:
+  host: "localhost"
+  port: "8000"
+  flusher_chunk_size: 10
+  saver_capacity: 100
+
+database:
+  dbname: "ova"
+  host: "localhost"
+  port: "5432"
+  user: "ova"
+  password: "iloveozon"
+  pool_max_conns: 10
+
+jaeger:
+  host: "localhost"
+  port: "6831"
+
+kafka:
+  brokers:
+    - "127.0.0.1:9092"
+
+prometheus:
+  host: "localhost"
+  port: "9102"

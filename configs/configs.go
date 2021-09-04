@@ -8,65 +8,58 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"gopkg.in/yaml.v2"
+	"github.com/spf13/viper"
 )
 
-var ServerConfig *Server
-var DatabaseConfig *Database
-var KafkaConfig *Kafka
-var JaegerConfig *Jaeger
-var PrometheusConfig *Prometheus
+var Config *CompositeConfig
 
-type Server struct {
-	Host             string `yaml:"host"`
-	Port             string `yaml:"port"`
-	FlusherChunkSize int    `yaml:"flusher_chunk_size"`
-	SaverCapacity    uint   `yaml:"saver_capacity"`
+type CompositeConfig struct {
+	Server     *ServerConfig
+	Database   *DatabaseConfig
+	Kafka      *KafkaConfig
+	Jaeger     *JaegerConfig
+	Prometheus *PrometheusConfig
 }
 
-type Database struct {
+type ServerConfig struct {
+	Host             string `yaml:"host"`
+	Port             string `yaml:"port"`
+	FlusherChunkSize int    `yaml:"flusher_chunk_size" mapstructure:"flusher_chunk_size"`
+	SaverCapacity    uint   `yaml:"saver_capacity" mapstructure:"saver_capacity"`
+}
+
+type DatabaseConfig struct {
 	DBName       string `yaml:"dbname"`
 	Host         string `yaml:"host"`
 	Port         string `yaml:"port"`
-	Username     string `yaml:"user"`
+	Username     string `yaml:"user" mapstructure:"user"`
 	Password     string `yaml:"password"`
-	PoolMaxConns int    `yaml:"pool_max_conns"`
+	PoolMaxConns int    `yaml:"pool_max_conns" mapstructure:"pool_max_conns"`
 }
 
-type Kafka struct {
+type KafkaConfig struct {
 	Brokers []string `yaml:"brokers"`
 }
 
-type Jaeger struct {
+type JaegerConfig struct {
 	Host string `yaml:"host"`
 	Port string `yaml:"port"`
 }
 
-type Prometheus struct {
+type PrometheusConfig struct {
 	Host string `yaml:"host"`
 	Port string `yaml:"port"`
 }
 
 func Load() {
-	ServerConfig = &Server{}
-	DatabaseConfig = &Database{}
-	KafkaConfig = &Kafka{}
-	JaegerConfig = &Jaeger{}
-	PrometheusConfig = &Prometheus{}
-
-	mapper := map[string]interface{}{
-		"database":   DatabaseConfig,
-		"server":     ServerConfig,
-		"kafka":      KafkaConfig,
-		"jaeger":     JaegerConfig,
-		"prometheus": PrometheusConfig,
+	setupViper()
+	err := viper.ReadInConfig()
+	if err != nil {
+		log.Fatal(err.Error())
 	}
 
-	configDir := getConfigDir()
-	for name, config := range mapper {
-		configFile := path.Join(configDir, name+".yml")
-		loadConfigFromFile(configFile, config)
-	}
+	Config = &CompositeConfig{}
+	viper.Unmarshal(Config)
 }
 
 func getConfigDir() string {
@@ -81,21 +74,12 @@ func getConfigDir() string {
 	return path.Join(basePath, configDir)
 }
 
-func loadConfigFromFile(name string, config interface{}) {
-	f, err := os.Open(name)
-	if err != nil {
-		log.Fatal(err.Error())
-	}
-	defer f.Close()
-
-	decoder := yaml.NewDecoder(f)
-
-	err = decoder.Decode(config)
-	if err != nil {
-		log.Fatal(err.Error())
-	}
+func (s *ServerConfig) GetAddress() string {
+	return fmt.Sprintf("%s:%s", s.Host, s.Port)
 }
 
-func (s *Server) GetAddress() string {
-	return fmt.Sprintf("%s:%s", s.Host, s.Port)
+func setupViper() {
+	viper.SetConfigName("config")
+	viper.SetConfigType("yaml")
+	viper.AddConfigPath(getConfigDir())
 }

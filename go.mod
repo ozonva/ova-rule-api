@@ -20,6 +20,8 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.11.0
 	github.com/rs/zerolog v1.24.0
+	github.com/spf13/cast v1.4.1 // indirect
+	github.com/spf13/viper v1.8.1
 	github.com/stretchr/objx v0.3.0 // indirect
 	github.com/stretchr/testify v1.7.0
 	github.com/uber/jaeger-client-go v2.29.1+incompatible
@@ -32,5 +34,6 @@ require (
 	google.golang.org/genproto v0.0.0-20210903162649-d08c68adba83 // indirect
 	google.golang.org/grpc v1.40.0
 	google.golang.org/protobuf v1.27.1
+	gopkg.in/ini.v1 v1.62.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0
 )

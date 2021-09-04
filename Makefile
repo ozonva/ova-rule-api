@@ -25,6 +25,7 @@ deps:
 	go get -u github.com/Shopify/sarama
 	go get -u github.com/uber/jaeger-client-go
 	go get -u github.com/prometheus/client_golang
+	go get -u github.com/spf13/viper
 
 	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
 	go install github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger

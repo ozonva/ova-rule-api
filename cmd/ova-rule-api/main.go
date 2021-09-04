@@ -26,13 +26,13 @@ func main() {
 
 	log.Info().Msg("Подключаемся к базе...")
 
-	pool, err := db.Connect(ctx, configs.DatabaseConfig)
+	pool, err := db.Connect(ctx, configs.Config.Database)
 	if err != nil {
 		log.Fatal().Err(err)
 	}
 	defer pool.Close()
 
-	producer, err := kafka.NewAsyncProducer(configs.KafkaConfig.Brokers)
+	producer, err := kafka.NewAsyncProducer(configs.Config.Kafka.Brokers)
 	if err != nil {
 		log.Fatal().Err(err)
 	}
@@ -45,13 +45,13 @@ func main() {
 
 	ruleMetrics := metrics.NewMetrics()
 	ruleRepo := repo.NewRepo(ctx, pool, producer)
-	ruleFlusher := flusher.NewFlusher(configs.ServerConfig.FlusherChunkSize, ruleRepo)
-	ruleSaver := saver.NewSaver(configs.ServerConfig.SaverCapacity, ruleFlusher, time.Second)
+	ruleFlusher := flusher.NewFlusher(configs.Config.Server.FlusherChunkSize, ruleRepo)
+	ruleSaver := saver.NewSaver(configs.Config.Server.SaverCapacity, ruleFlusher, time.Second)
 	ruleSaver.Init()
 
 	metrics.RunServer()
 
-	log.Info().Msgf("Запускаем gRPC сервер: %s", configs.ServerConfig.GetAddress())
+	log.Info().Msgf("Запускаем gRPC сервер: %s", configs.Config.Server.GetAddress())
 
 	apiServer := api.NewAPIServer(ruleRepo, ruleSaver, ruleMetrics)
 	if err = api.Run(&apiServer); err != nil {
