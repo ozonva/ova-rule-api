@@ -13,6 +13,9 @@ import (
 
 var ServerConfig *Server
 var DatabaseConfig *Database
+var KafkaConfig *Kafka
+var JaegerConfig *Jaeger
+var PrometheusConfig *Prometheus
 
 type Server struct {
 	Host string `yaml:"host"`
@@ -28,13 +31,33 @@ type Database struct {
 	PoolMaxConns int    `yaml:"pool_max_conns"`
 }
 
+type Kafka struct {
+	Brokers []string `yaml:"brokers"`
+}
+
+type Jaeger struct {
+	Host string `yaml:"host"`
+	Port string `yaml:"port"`
+}
+
+type Prometheus struct {
+	Host string `yaml:"host"`
+	Port string `yaml:"port"`
+}
+
 func Load() {
 	ServerConfig = &Server{}
 	DatabaseConfig = &Database{}
+	KafkaConfig = &Kafka{}
+	JaegerConfig = &Jaeger{}
+	PrometheusConfig = &Prometheus{}
 
 	mapper := map[string]interface{}{
-		"database": DatabaseConfig,
-		"server":   ServerConfig,
+		"database":   DatabaseConfig,
+		"server":     ServerConfig,
+		"kafka":      KafkaConfig,
+		"jaeger":     JaegerConfig,
+		"prometheus": PrometheusConfig,
 	}
 
 	configDir := getConfigDir()

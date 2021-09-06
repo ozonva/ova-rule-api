@@ -22,6 +22,9 @@ deps:
 	go get -u github.com/jackc/pgx/v4
 	go get -u github.com/georgysavva/scany
 	go get -u github.com/Masterminds/squirrel
+	go get -u github.com/Shopify/sarama
+	go get -u github.com/uber/jaeger-client-go
+	go get -u github.com/prometheus/client_golang
 
 	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
 	go install github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger
@@ -54,6 +57,8 @@ mocks:
 	rm -rf ./internal/mocks/mock_*
 	mockgen -source=./internal/repo/repo.go -destination=./internal/mocks/mock_repo.go -package mocks
 	mockgen -source=./internal/flusher/flusher.go -destination=./internal/mocks/mock_flusher.go -package mocks
+	mockgen -source=./internal/kafka/producer.go -destination=./internal/mocks/mock_producer.go -package mocks
+	mockgen -source=./internal/metrics/metrics.go -destination=./internal/mocks/mock_metrics.go -package mocks
 
 .PHONY: migrate-up
 migrate-up:
@@ -69,3 +74,11 @@ migrate-down:
 migrate-status:
 	cd migrations &&\
  	goose postgres "postgres://ova:iloveozon@localhost:5432/ova?sslmode=disable" status
+
+.PHONY: up
+up:
+	docker-compose up
+
+.PHONY: down
+down:
+	docker-compose down

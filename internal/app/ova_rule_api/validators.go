@@ -45,3 +45,21 @@ func validateRemoveRuleRequest(req *desc.RemoveRuleRequest) error {
 
 	return nil
 }
+
+func validateMultiCreateRuleRequest(req *desc.MultiCreateRuleRequest) error {
+	for _, rule := range req.Rules {
+		if rule.Id == 0 {
+			return errors.Wrap(notPositiveIdError, "rule")
+		}
+	}
+
+	return nil
+}
+
+func validateUpdateRuleRequest(req *desc.UpdateRuleRequest) error {
+	if req.Rule.Id == 0 {
+		return errors.Wrap(notPositiveIdError, "rule")
+	}
+
+	return nil
+}

@@ -3,7 +3,10 @@ package main
 import (
 	"context"
 	"github.com/ozonva/ova-rule-api/internal/flusher"
+	"github.com/ozonva/ova-rule-api/internal/kafka"
+	"github.com/ozonva/ova-rule-api/internal/metrics"
 	"github.com/ozonva/ova-rule-api/internal/saver"
+	"github.com/ozonva/ova-rule-api/internal/tracer"
 	"time"
 
 	"github.com/rs/zerolog/log"
@@ -27,13 +30,27 @@ func main() {
 	}
 	defer pool.Close()
 
-	repo_ := repo.NewRepo(ctx, pool)
+	producer, err := kafka.NewAsyncProducer(configs.KafkaConfig.Brokers)
+	if err != nil {
+		log.Fatal().Err(err)
+	}
+
+	closer, err := tracer.InitTracer()
+	if err != nil {
+		log.Fatal().Err(err)
+	}
+	defer closer.Close()
+
+	metrics_ := metrics.NewMetrics()
+	repo_ := repo.NewRepo(ctx, pool, producer)
 	flusher_ := flusher.NewFlusher(10, repo_)
 	saver_ := saver.NewSaver(100, flusher_, time.Second)
 	saver_.Init()
 
+	metrics.RunServer()
+
 	log.Info().Msgf("Запускаем gRPC сервер: %s", configs.ServerConfig.GetAddress())
-	apiServer := api.NewAPIServer(repo_, saver_)
+	apiServer := api.NewAPIServer(repo_, saver_, metrics_)
 	if err = api.Run(&apiServer); err != nil {
 		log.Fatal().Err(err)
 	}

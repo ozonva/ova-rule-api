@@ -91,3 +91,17 @@ func (mr *MockRepoMockRecorder) RemoveRule(ruleID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveRule", reflect.TypeOf((*MockRepo)(nil).RemoveRule), ruleID)
 }
+
+// UpdateRule mocks base method.
+func (m *MockRepo) UpdateRule(rule models.Rule) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateRule", rule)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateRule indicates an expected call of UpdateRule.
+func (mr *MockRepoMockRecorder) UpdateRule(rule interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateRule", reflect.TypeOf((*MockRepo)(nil).UpdateRule), rule)
+}

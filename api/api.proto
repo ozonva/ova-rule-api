@@ -11,6 +11,8 @@ service API {
   rpc DescribeRule(DescribeRuleRequest) returns (DescribeRuleResponse);
   rpc ListRules(ListRulesRequest) returns (ListRulesResponse);
   rpc RemoveRule(RemoveRuleRequest) returns (google.protobuf.Empty);
+  rpc MultiCreateRule(MultiCreateRuleRequest) returns (google.protobuf.Empty);
+  rpc UpdateRule(UpdateRuleRequest) returns (google.protobuf.Empty);
 }
 
 message Rule {
@@ -44,4 +46,12 @@ message ListRulesResponse {
 
 message RemoveRuleRequest {
   uint64 id = 1;
+}
+
+message MultiCreateRuleRequest {
+  repeated Rule rules = 1;
+}
+
+message UpdateRuleRequest {
+  Rule rule = 1;
 }

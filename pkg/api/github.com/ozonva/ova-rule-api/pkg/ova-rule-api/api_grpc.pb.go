@@ -23,6 +23,8 @@ type APIClient interface {
 	DescribeRule(ctx context.Context, in *DescribeRuleRequest, opts ...grpc.CallOption) (*DescribeRuleResponse, error)
 	ListRules(ctx context.Context, in *ListRulesRequest, opts ...grpc.CallOption) (*ListRulesResponse, error)
 	RemoveRule(ctx context.Context, in *RemoveRuleRequest, opts ...grpc.CallOption) (*empty.Empty, error)
+	MultiCreateRule(ctx context.Context, in *MultiCreateRuleRequest, opts ...grpc.CallOption) (*empty.Empty, error)
+	UpdateRule(ctx context.Context, in *UpdateRuleRequest, opts ...grpc.CallOption) (*empty.Empty, error)
 }
 
 type aPIClient struct {
@@ -69,6 +71,24 @@ func (c *aPIClient) RemoveRule(ctx context.Context, in *RemoveRuleRequest, opts 
 	return out, nil
 }
 
+func (c *aPIClient) MultiCreateRule(ctx context.Context, in *MultiCreateRuleRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/ova.rule.api.API/MultiCreateRule", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *aPIClient) UpdateRule(ctx context.Context, in *UpdateRuleRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/ova.rule.api.API/UpdateRule", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // APIServer is the server API for API service.
 // All implementations must embed UnimplementedAPIServer
 // for forward compatibility
@@ -77,6 +97,8 @@ type APIServer interface {
 	DescribeRule(context.Context, *DescribeRuleRequest) (*DescribeRuleResponse, error)
 	ListRules(context.Context, *ListRulesRequest) (*ListRulesResponse, error)
 	RemoveRule(context.Context, *RemoveRuleRequest) (*empty.Empty, error)
+	MultiCreateRule(context.Context, *MultiCreateRuleRequest) (*empty.Empty, error)
+	UpdateRule(context.Context, *UpdateRuleRequest) (*empty.Empty, error)
 	mustEmbedUnimplementedAPIServer()
 }
 
@@ -95,6 +117,12 @@ func (UnimplementedAPIServer) ListRules(context.Context, *ListRulesRequest) (*Li
 }
 func (UnimplementedAPIServer) RemoveRule(context.Context, *RemoveRuleRequest) (*empty.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RemoveRule not implemented")
+}
+func (UnimplementedAPIServer) MultiCreateRule(context.Context, *MultiCreateRuleRequest) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MultiCreateRule not implemented")
+}
+func (UnimplementedAPIServer) UpdateRule(context.Context, *UpdateRuleRequest) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateRule not implemented")
 }
 func (UnimplementedAPIServer) mustEmbedUnimplementedAPIServer() {}
 
@@ -181,6 +209,42 @@ func _API_RemoveRule_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _API_MultiCreateRule_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MultiCreateRuleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(APIServer).MultiCreateRule(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ova.rule.api.API/MultiCreateRule",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(APIServer).MultiCreateRule(ctx, req.(*MultiCreateRuleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _API_UpdateRule_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateRuleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(APIServer).UpdateRule(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ova.rule.api.API/UpdateRule",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(APIServer).UpdateRule(ctx, req.(*UpdateRuleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // API_ServiceDesc is the grpc.ServiceDesc for API service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -203,6 +267,14 @@ var API_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RemoveRule",
 			Handler:    _API_RemoveRule_Handler,
+		},
+		{
+			MethodName: "MultiCreateRule",
+			Handler:    _API_MultiCreateRule_Handler,
+		},
+		{
+			MethodName: "UpdateRule",
+			Handler:    _API_UpdateRule_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

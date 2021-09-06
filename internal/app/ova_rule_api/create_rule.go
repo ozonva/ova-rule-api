@@ -29,5 +29,7 @@ func (a *apiServer) CreateRule(ctx context.Context, req *desc.CreateRuleRequest)
 		return nil, status.Errorf(codes.Internal, err.Error())
 	}
 
+	a.metrics.CreateRuleCounterInc()
+
 	return &emptypb.Empty{}, nil
 }

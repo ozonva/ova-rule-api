@@ -16,21 +16,23 @@ import (
 
 var _ = Describe("Service", func() {
 	var (
-		ctrl     *gomock.Controller
-		mockRepo *mocks.MockRepo
-		api      desc.APIServer
-		ctx      context.Context
+		ctrl        *gomock.Controller
+		mockRepo    *mocks.MockRepo
+		mockMetrics *mocks.MockMetrics
+		api         desc.APIServer
+		ctx         context.Context
 	)
 
 	BeforeEach(func() {
 		ctrl = gomock.NewController(GinkgoT())
 		mockRepo = mocks.NewMockRepo(ctrl)
+		mockMetrics = mocks.NewMockMetrics(ctrl)
 		ctx = context.Background()
 		flusher_ := flusher.NewFlusher(10, mockRepo)
 		saver_ := saver.NewSaver(100, flusher_, 100*time.Millisecond)
 		saver_.Init()
 
-		api = NewAPIServer(mockRepo, saver_)
+		api = NewAPIServer(mockRepo, saver_, mockMetrics)
 	})
 
 	AfterEach(func() {
@@ -41,6 +43,7 @@ var _ = Describe("Service", func() {
 		It("CreateRule", func() {
 			someRule := models.Rule{ID: 1, Name: "awesome", UserID: 777}
 			mockRepo.EXPECT().AddRules([]models.Rule{someRule}).Times(1)
+			mockMetrics.EXPECT().CreateRuleCounterInc().Times(1)
 
 			_, err := api.CreateRule(ctx, &desc.CreateRuleRequest{
 				Id:     1,
@@ -49,6 +52,42 @@ var _ = Describe("Service", func() {
 			})
 			// Дадим время для сохранения правила через очередь.
 			time.Sleep(200 * time.Millisecond)
+
+			Expect(err).ShouldNot(HaveOccurred())
+		})
+
+		It("MultiCreateRule", func() {
+			rules := []models.Rule{
+				{ID: 1, Name: "satan", UserID: 666},
+				{ID: 2, Name: "lucky", UserID: 777},
+			}
+			mockRepo.EXPECT().AddRules(rules).Times(1)
+
+			reqRules := [](*desc.Rule){
+				{Id: 1, Name: "satan", UserId: 666},
+				{Id: 2, Name: "lucky", UserId: 777},
+			}
+			_, err := api.MultiCreateRule(ctx, &desc.MultiCreateRuleRequest{
+				Rules: reqRules,
+			})
+			// Дадим время для сохранения правила через очередь.
+			time.Sleep(200 * time.Millisecond)
+
+			Expect(err).ShouldNot(HaveOccurred())
+		})
+
+		It("UpdateRule", func() {
+			rule := models.Rule{ID: 1, Name: "new name", UserID: 777}
+			mockRepo.EXPECT().UpdateRule(rule).Times(1)
+			mockMetrics.EXPECT().UpdateRuleCounterInc().Times(1)
+
+			_, err := api.UpdateRule(ctx, &desc.UpdateRuleRequest{
+				Rule: &desc.Rule{
+					Id: rule.ID,
+					Name: "new name",
+					UserId: 777,
+				},
+			})
 
 			Expect(err).ShouldNot(HaveOccurred())
 		})
@@ -84,6 +123,7 @@ var _ = Describe("Service", func() {
 
 		It("RemoveRule", func() {
 			mockRepo.EXPECT().RemoveRule(uint64(777)).Return(nil).Times(1)
+			mockMetrics.EXPECT().RemoveRuleCounterInc().Times(1)
 
 			_, err := api.RemoveRule(ctx, &desc.RemoveRuleRequest{
 				Id: uint64(777),

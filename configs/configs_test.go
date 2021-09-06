@@ -19,9 +19,23 @@ func TestConfigsLoad(t *testing.T) {
 		Password:     "iloveozon",
 		PoolMaxConns: 10,
 	}
+	kafkaCfg := Kafka{
+		Brokers: []string{"127.0.0.1:9092"},
+	}
+	jaegerCfg := Jaeger{
+		Host: "localhost",
+		Port: "6831",
+	}
+	prometheusCfg := Prometheus{
+		Host: "localhost",
+		Port: "9102",
+	}
 
 	Load()
 
 	assert.Equal(t, serverCfg, *ServerConfig)
 	assert.Equal(t, databaseCfg, *DatabaseConfig)
+	assert.Equal(t, kafkaCfg, *KafkaConfig)
+	assert.Equal(t, jaegerCfg, *JaegerConfig)
+	assert.Equal(t, prometheusCfg, *PrometheusConfig)
 }

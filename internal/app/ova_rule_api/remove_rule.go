@@ -2,7 +2,6 @@ package ova_rule_api
 
 import (
 	"context"
-
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
@@ -23,6 +22,8 @@ func (a *apiServer) RemoveRule(ctx context.Context, req *desc.RemoveRuleRequest)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, err.Error())
 	}
+
+	a.metrics.RemoveRuleCounterInc()
 
 	log.Info().Msgf("Правило с id=%d удалено", req.Id)
 
