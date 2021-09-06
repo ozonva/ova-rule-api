@@ -13,6 +13,8 @@ import (
 	desc "github.com/ozonva/ova-rule-api/pkg/api/github.com/ozonva/ova-rule-api/pkg/ova-rule-api"
 )
 
+// CreateRule сохраняет правило в БД.
+// При успешном добавлении правила отправляем событие в очередь сообщений.
 func (a *apiServer) CreateRule(ctx context.Context, req *desc.CreateRuleRequest) (*emptypb.Empty, error) {
 	log.Info().Msgf("CreateRuleRequest: %+v", req)
 

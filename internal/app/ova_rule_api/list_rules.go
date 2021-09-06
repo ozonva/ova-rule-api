@@ -11,6 +11,7 @@ import (
 	desc "github.com/ozonva/ova-rule-api/pkg/api/github.com/ozonva/ova-rule-api/pkg/ova-rule-api"
 )
 
+// ListRules возвращает список правил.
 func (a *apiServer) ListRules(
 	ctx context.Context,
 	req *desc.ListRulesRequest,

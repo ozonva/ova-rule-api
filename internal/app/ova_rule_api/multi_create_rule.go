@@ -16,6 +16,7 @@ import (
 	desc "github.com/ozonva/ova-rule-api/pkg/api/github.com/ozonva/ova-rule-api/pkg/ova-rule-api"
 )
 
+// MultiCreateRule позволяет массово добавить правило в БД.
 func (a *apiServer) MultiCreateRule(ctx context.Context, req *desc.MultiCreateRuleRequest) (*empty.Empty, error) {
 	log.Info().Msgf("MultiCreateRule: %+v", req)
 

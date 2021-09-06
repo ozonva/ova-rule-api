@@ -26,6 +26,7 @@ deps:
 	go get -u github.com/uber/jaeger-client-go
 	go get -u github.com/prometheus/client_golang
 	go get -u github.com/spf13/viper
+	go get -u golang.org/x/tools/cmd/godoc
 
 	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
 	go install github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger
@@ -87,3 +88,7 @@ up:
 .PHONY: down
 down:
 	docker-compose down
+
+.PHONY: doc
+doc:
+	godoc -http=:6060

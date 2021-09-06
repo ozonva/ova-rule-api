@@ -13,6 +13,7 @@ import (
 	desc "github.com/ozonva/ova-rule-api/pkg/api/github.com/ozonva/ova-rule-api/pkg/ova-rule-api"
 )
 
+// UpdateRule обновляет правило по идентификатору.
 func (a *apiServer) UpdateRule(ctx context.Context, req *desc.UpdateRuleRequest) (*emptypb.Empty, error) {
 	log.Info().Msgf("UpdateRuleRequest: %+v", req)
 
