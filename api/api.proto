@@ -13,6 +13,7 @@ service API {
   rpc RemoveRule(RemoveRuleRequest) returns (google.protobuf.Empty);
   rpc MultiCreateRule(MultiCreateRuleRequest) returns (google.protobuf.Empty);
   rpc UpdateRule(UpdateRuleRequest) returns (google.protobuf.Empty);
+  rpc Status(google.protobuf.Empty) returns (StatusResponse);
 }
 
 message Rule {
@@ -54,4 +55,8 @@ message MultiCreateRuleRequest {
 
 message UpdateRuleRequest {
   Rule rule = 1;
+}
+
+message StatusResponse {
+  string status = 1;
 }

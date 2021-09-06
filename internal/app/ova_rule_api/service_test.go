@@ -4,6 +4,8 @@ import (
 	"context"
 	"time"
 
+	"google.golang.org/protobuf/types/known/emptypb"
+
 	"github.com/golang/mock/gomock"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -129,6 +131,12 @@ var _ = Describe("Service", func() {
 			_, err := api.RemoveRule(ctx, &desc.RemoveRuleRequest{
 				Id: uint64(777),
 			})
+			Expect(err).ShouldNot(HaveOccurred())
+		})
+
+		It("Status", func() {
+			resp, err := api.Status(ctx, &emptypb.Empty{})
+			Expect(resp.Status).To(Equal("ok"))
 			Expect(err).ShouldNot(HaveOccurred())
 		})
 	})
