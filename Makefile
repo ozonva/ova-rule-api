@@ -58,6 +58,10 @@ lint-fix:
 test: mocks
 	go test -race ./...
 
+.PHONY: test-cover
+test-cover:
+	go test -cover ./...
+
 .PHONY: mocks
 mocks:
 	rm -rf ./internal/mocks/mock_*
