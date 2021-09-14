@@ -10,6 +10,8 @@ import (
 )
 
 func TestSplitToBulksPositive(t *testing.T) {
+	t.Parallel()
+
 	cases := []struct {
 		rules     []models.Rule
 		batchSize int
@@ -37,11 +39,14 @@ func TestSplitToBulksPositive(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
+
 		assert.Equal(t, c.expected, actual)
 	}
 }
 
 func TestSplitToBulksNegative(t *testing.T) {
+	t.Parallel()
+
 	emptyRulesError := errors.New("rules is empty or nil")
 	notPositiveBatchSizeError := errors.New("batchSize must be positive number")
 
@@ -79,6 +84,8 @@ func TestSplitToBulksNegative(t *testing.T) {
 }
 
 func TestMapRulesPositive(t *testing.T) {
+	t.Parallel()
+
 	cases := []struct {
 		rules    []models.Rule
 		expected map[uint64]models.Rule
@@ -102,11 +109,14 @@ func TestMapRulesPositive(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
+
 		assert.Equal(t, c.expected, actual)
 	}
 }
 
 func TestMapRulesNegative(t *testing.T) {
+	t.Parallel()
+
 	rules := []models.Rule{{UserID: 2}, {UserID: 2}}
 	_, err := MapRules(rules)
 	assert.EqualError(t, err, "duplicate key")

@@ -6,15 +6,17 @@ import (
 	desc "github.com/ozonva/ova-rule-api/pkg/api/github.com/ozonva/ova-rule-api/pkg/ova-rule-api"
 )
 
-var notPositiveIdError = errors.New("id must be positive")
+var errNotPositiveID = errors.New("id must be positive")
 
 func validateCreateRuleRequest(req *desc.CreateRuleRequest) error {
 	if req.Id == 0 {
-		return errors.Wrap(notPositiveIdError, "rule")
+		return errors.Wrap(errNotPositiveID, "rule")
 	}
+
 	if req.UserId == 0 {
-		return errors.Wrap(notPositiveIdError, "user")
+		return errors.Wrap(errNotPositiveID, "user")
 	}
+
 	if req.Name == "" {
 		return errors.New("rule name must be not empty")
 	}
@@ -32,7 +34,7 @@ func validateListRulesRequest(req *desc.ListRulesRequest) error {
 
 func validateDescribeRuleRequest(req *desc.DescribeRuleRequest) error {
 	if req.Id == 0 {
-		return errors.Wrap(notPositiveIdError, "rule")
+		return errors.Wrap(errNotPositiveID, "rule")
 	}
 
 	return nil
@@ -40,7 +42,7 @@ func validateDescribeRuleRequest(req *desc.DescribeRuleRequest) error {
 
 func validateRemoveRuleRequest(req *desc.RemoveRuleRequest) error {
 	if req.Id == 0 {
-		return errors.Wrap(notPositiveIdError, "rule")
+		return errors.Wrap(errNotPositiveID, "rule")
 	}
 
 	return nil
@@ -49,7 +51,7 @@ func validateRemoveRuleRequest(req *desc.RemoveRuleRequest) error {
 func validateMultiCreateRuleRequest(req *desc.MultiCreateRuleRequest) error {
 	for _, rule := range req.Rules {
 		if rule.Id == 0 {
-			return errors.Wrap(notPositiveIdError, "rule")
+			return errors.Wrap(errNotPositiveID, "rule")
 		}
 	}
 
@@ -58,7 +60,7 @@ func validateMultiCreateRuleRequest(req *desc.MultiCreateRuleRequest) error {
 
 func validateUpdateRuleRequest(req *desc.UpdateRuleRequest) error {
 	if req.Rule.Id == 0 {
-		return errors.Wrap(notPositiveIdError, "rule")
+		return errors.Wrap(errNotPositiveID, "rule")
 	}
 
 	return nil

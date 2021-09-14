@@ -1,0 +1,22 @@
+linters:
+  enable-all: true
+  disable:
+    - funlen
+    - gci
+    - gochecknoglobals
+    - gocognit
+    - godox
+    - gofumpt
+    - gomodguard
+    - nestif
+    - testpackage
+    - wrapcheck
+    - ifshort
+    - dogsled
+    - tagliatelle
+    - exhaustivestruct
+    - goerr113
+    - gocritic
+linters-settings:
+  exhaustive:
+    default-signifies-exhaustive: true

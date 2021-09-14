@@ -62,6 +62,7 @@ func (r *repo) AddRules(rules []models.Rule) error {
 	_, err = conn.Exec(r.ctx, sql, args...)
 	if err != nil {
 		log.Info().Msg(err.Error())
+
 		return err
 	}
 
@@ -234,6 +235,7 @@ func encodeMessageToJSON(body interface{}) (string, error) {
 	result, err := json.Marshal(body)
 	if err != nil {
 		log.Error().Msg("encode error")
+
 		return "", err
 	}
 

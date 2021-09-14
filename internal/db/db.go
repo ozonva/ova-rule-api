@@ -8,7 +8,7 @@ import (
 	"github.com/ozonva/ova-rule-api/configs"
 )
 
-func Connect(ctx context.Context, config *configs.Database) (*pgxpool.Pool, error) {
+func Connect(ctx context.Context, config *configs.DatabaseConfig) (*pgxpool.Pool, error) {
 	dsn := fmt.Sprintf(
 		"postgres://%s:%s@%s:%s/%s?pool_max_conns=%d&sslmode=disable",
 		config.Username,
@@ -18,6 +18,7 @@ func Connect(ctx context.Context, config *configs.Database) (*pgxpool.Pool, erro
 		config.DBName,
 		config.PoolMaxConns,
 	)
+
 	pgxConfig, err := pgxpool.ParseConfig(dsn)
 	if err != nil {
 		return nil, err

@@ -2,6 +2,7 @@ package ova_rule_api
 
 import (
 	"context"
+
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
@@ -11,6 +12,7 @@ import (
 	desc "github.com/ozonva/ova-rule-api/pkg/api/github.com/ozonva/ova-rule-api/pkg/ova-rule-api"
 )
 
+// RemoveRule удаляет правило из БД по идентификатору.
 func (a *apiServer) RemoveRule(ctx context.Context, req *desc.RemoveRuleRequest) (*emptypb.Empty, error) {
 	log.Info().Msgf("RemoveRuleRequest: %+v", req)
 

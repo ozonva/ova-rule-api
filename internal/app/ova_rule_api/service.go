@@ -34,7 +34,7 @@ func NewAPIServer(
 }
 
 func Run(apiServer *desc.APIServer) error {
-	address := fmt.Sprintf("%s:%s", configs.ServerConfig.Host, configs.ServerConfig.Port)
+	address := fmt.Sprintf("%s:%s", configs.Config.Server.Host, configs.Config.Server.Port)
 	listen, err := net.Listen("tcp", address)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)

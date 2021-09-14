@@ -14,7 +14,7 @@ func RunServer() {
 	mux.Handle("/metrics/", promhttp.Handler())
 
 	server := &http.Server{
-		Addr:    fmt.Sprintf("%s:%s", configs.PrometheusConfig.Host, configs.PrometheusConfig.Port),
+		Addr:    fmt.Sprintf("%s:%s", configs.Config.Prometheus.Host, configs.Config.Prometheus.Port),
 		Handler: mux,
 	}
 

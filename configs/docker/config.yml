@@ -1,0 +1,25 @@
+server:
+  host: "0.0.0.0"
+  port: "8000"
+  flusher_chunk_size: 10
+  saver_capacity: 100
+
+database:
+  dbname: "ova"
+  host: "pg-ova.lan"
+  port: "5432"
+  user: "ova"
+  password: "iloveozon"
+  pool_max_conns: 10
+
+jaeger:
+  host: "jaeger"
+  port: "6831"
+
+kafka:
+  brokers:
+    - "127.0.0.1:9092"
+
+prometheus:
+  host: "prometheus"
+  port: "9102"

@@ -2,6 +2,10 @@ package ova_rule_api
 
 import (
 	"context"
+	"time"
+
+	"google.golang.org/protobuf/types/known/emptypb"
+
 	"github.com/golang/mock/gomock"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -9,7 +13,6 @@ import (
 	"github.com/ozonva/ova-rule-api/internal/mocks"
 	"github.com/ozonva/ova-rule-api/internal/models"
 	"github.com/ozonva/ova-rule-api/internal/saver"
-	"time"
 
 	desc "github.com/ozonva/ova-rule-api/pkg/api/github.com/ozonva/ova-rule-api/pkg/ova-rule-api"
 )
@@ -83,8 +86,8 @@ var _ = Describe("Service", func() {
 
 			_, err := api.UpdateRule(ctx, &desc.UpdateRuleRequest{
 				Rule: &desc.Rule{
-					Id: rule.ID,
-					Name: "new name",
+					Id:     rule.ID,
+					Name:   "new name",
 					UserId: 777,
 				},
 			})
@@ -128,6 +131,12 @@ var _ = Describe("Service", func() {
 			_, err := api.RemoveRule(ctx, &desc.RemoveRuleRequest{
 				Id: uint64(777),
 			})
+			Expect(err).ShouldNot(HaveOccurred())
+		})
+
+		It("Status", func() {
+			resp, err := api.Status(ctx, &emptypb.Empty{})
+			Expect(resp.Status).To(Equal("ok"))
 			Expect(err).ShouldNot(HaveOccurred())
 		})
 	})

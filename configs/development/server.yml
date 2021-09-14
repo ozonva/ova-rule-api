@@ -1,2 +1,4 @@
 host: "localhost"
 port: "8000"
+flusher_chunk_size: 10
+saver_capacity: 100

@@ -52,8 +52,9 @@ func (s *saver) Init() {
 			select {
 			case <-ticker.C:
 				s.flush()
-			case <-s.notifyCh:
+			case <-ch:
 				s.flush()
+
 				return
 			}
 		}

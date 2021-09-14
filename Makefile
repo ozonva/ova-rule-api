@@ -25,6 +25,8 @@ deps:
 	go get -u github.com/Shopify/sarama
 	go get -u github.com/uber/jaeger-client-go
 	go get -u github.com/prometheus/client_golang
+	go get -u github.com/spf13/viper
+	go get -u golang.org/x/tools/cmd/godoc
 
 	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
 	go install github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger
@@ -46,11 +48,19 @@ run:
 
 .PHONY: lint
 lint:
-	golangci-lint run -v
+	golangci-lint run ./...
+
+.PHONY: lint-fix
+lint-fix:
+	golangci-lint run ./... --fix
 
 .PHONY: test
 test: mocks
 	go test -race ./...
+
+.PHONY: test-cover
+test-cover:
+	go test -cover ./...
 
 .PHONY: mocks
 mocks:
@@ -82,3 +92,7 @@ up:
 .PHONY: down
 down:
 	docker-compose down
+
+.PHONY: doc
+doc:
+	godoc -http=:6060
